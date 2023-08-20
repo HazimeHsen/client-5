@@ -1,9 +1,26 @@
+"use client";
 import Image from "next/image";
+import { useInView } from "react-intersection-observer";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
 
 const SwimBanner = () => {
+  const controls = useAnimation();
+
+  useEffect(() => {
+      controls.start("visible");
+  }, [controls]);
   return (
     <div className="bg-header">
-      <div className="mx-auto max-w-7xl sm:pb-24 h-screen flex items-center justify-center px-6">
+      <motion.div
+        initial="hidden"
+        animate={controls}
+        variants={{
+          visible: { opacity: 1, y: 0 },
+          hidden: { opacity: 0, y: 50 },
+        }}
+        transition={{ duration: 0.5 }}
+        className={`mx-auto max-w-7xl sm:pb-24 h-screen flex items-center justify-center px-6`}>
         <div className="lg:flex items-center justify-between">
           <div className="col-span-7 flex flex-col just relative lg:max-w-[60%]">
             <Image
@@ -43,7 +60,7 @@ const SwimBanner = () => {
             />
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

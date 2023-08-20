@@ -1,8 +1,31 @@
-import React from "react";
-
+"use client";
+import React, { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { motion, useAnimation } from "framer-motion";
 const About = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true, // Only trigger the animation once
+    threshold: 0.2, // Percentage of the element in view
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
   return (
-    <div id="about" className="py-10 bg-white">
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: 50 },
+      }}
+      transition={{ duration: 0.5 }}
+      id="about"
+      className="py-10 bg-white">
       <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
         <span className="font-semibold text-lg text-center text-primary mb-2 block text-blue">
           About Us
@@ -35,7 +58,7 @@ const About = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

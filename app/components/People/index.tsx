@@ -1,12 +1,37 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { FiRefreshCw } from "react-icons/fi";
 import { CgScreen } from "react-icons/cg";
 import { FaSwimmer } from "react-icons/fa";
 import { IconType } from "react-icons/lib/esm/iconBase";
+import { useInView } from "react-intersection-observer";
+import { motion, useAnimation } from "framer-motion";
 
 const People = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true, // Only trigger the animation once
+    threshold: 0.2, // Percentage of the element in view
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
+
   return (
-    <section id="services" className="pt-10 pb-10 ">
+    <motion.section
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: 50 },
+      }}
+      transition={{ duration: 0.5 }}
+      id="services"
+      className="pt-10 pb-10 ">
       <div className="flex flex-wrap">
         <div className="w-full px-4">
           <div className="mx-auto mb-12 max-w-[510px] text-center lg:mb-20">
@@ -52,7 +77,7 @@ const People = () => {
           />
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

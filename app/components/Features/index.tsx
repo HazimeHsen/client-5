@@ -1,9 +1,60 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import BlogCard from "./BlogCard";
+import { useInView } from "react-intersection-observer";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
+const blogData = [
+  {
+    date: "Dec 22, 2023",
+    title: "Mastering the Perfect Freestyle Stroke",
+    imageSrc:
+      "https://cdn.tailgrids.com/1.0/assets/images/blogs/blog-01/image-01.jpg",
+    content:
+      "Learn the key techniques to perfect your freestyle swimming stroke.",
+  },
+  {
+    date: "Mar 15, 2023",
+    title: "Staying Safe: Tips for Open Water Swimming",
+    imageSrc:
+      "https://cdn.tailgrids.com/1.0/assets/images/blogs/blog-01/image-02.jpg",
+    content:
+      "Explore safety guidelines and best practices for open water swimming.",
+  },
+  {
+    date: "Jan 05, 2023",
+    title: "Benefits of Water Aerobics for Fitness",
+    imageSrc:
+      "https://cdn.tailgrids.com/1.0/assets/images/blogs/blog-01/image-03.jpg",
+    content: "Discover how water aerobics can enhance your fitness routine.",
+  },
+];
 
 const Blogs = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true, // Only trigger the animation once
+    threshold: 0.2, // Percentage of the element in view
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
   return (
-    <section id="blog" className="pt-10 pb-10">
+    <motion.section
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: 50 },
+      }}
+      transition={{ duration: 0.5 }}
+      id="blog"
+      className="pt-10 pb-10">
       <div className="container">
         <div className="flex flex-wrap justify-center">
           <div className="w-full px-4">
@@ -11,15 +62,7 @@ const Blogs = () => {
               <span className="font-semibold text-lg text-primary mb-2 block text-blue">
                 Swim Blogs
               </span>
-              <h2
-                className="
-                  font-bold
-                  text-3xl
-                  sm:text-4xl
-                  md:text-[40px]
-                  text-dark
-                  mb-4
-                  ">
+              <h2 className="mb-4 text-3xl font-bold text-dark sm:text-4xl md:text-[40px]">
                 Dive into Our Latest Articles
               </h2>
               <p className="text-base text-body-color text-lightgrey">
@@ -29,108 +72,13 @@ const Blogs = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap ">
-          <div className="w-full md:w-1/2 lg:w-1/3 px-4">
-            <div className="max-w-[370px] mx-auto mb-10">
-              <div className="rounded overflow-hidden mb-8">
-                <img
-                  src="https://cdn.tailgrids.com/1.0/assets/images/blogs/blog-01/image-01.jpg"
-                  alt="image"
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <span
-                  className="
-                     bg-blue                     rounded
-                     inline-block
-                     text-center
-                     py-1
-                     px-4
-                     text-xs
-                     leading-loose
-                     font-semibold
-                     text-white
-                     mb-5
-                     ">
-                  Dec 22, 2023
-                </span>
-                <h3>Mastering the Perfect Freestyle Stroke</h3>
-                <p className="text-base text-body-color">
-                  Learn the key techniques to perfect your freestyle swimming
-                  stroke.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full md:w-1/2 lg:w-1/3 px-4">
-            <div className="max-w-[370px] mx-auto mb-10">
-              <div className="rounded overflow-hidden mb-8">
-                <img
-                  src="https://cdn.tailgrids.com/1.0/assets/images/blogs/blog-01/image-02.jpg"
-                  alt="image"
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <span
-                  className="
-                     bg-blue                     rounded
-                     inline-block
-                     text-center
-                     py-1
-                     px-4
-                     text-xs
-                     leading-loose
-                     font-semibold
-                     text-white
-                     mb-5
-                     ">
-                  Mar 15, 2023
-                </span>
-                <h3>Staying Safe: Tips for Open Water Swimming</h3>
-                <p className="text-base text-body-color">
-                  Explore safety guidelines and best practices for open water
-                  swimming.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="w-full md:w-1/2 lg:w-1/3 px-4">
-            <div className="max-w-[370px] mx-auto mb-10">
-              <div className="rounded overflow-hidden mb-8">
-                <img
-                  src="https://cdn.tailgrids.com/1.0/assets/images/blogs/blog-01/image-03.jpg"
-                  alt="image"
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <span
-                  className="
-                     bg-blue                     rounded
-                     inline-block
-                     text-center
-                     py-1
-                     px-4
-                     text-xs
-                     leading-loose
-                     font-semibold
-                     text-white
-                     mb-5
-                     ">
-                  Jan 05, 2023
-                </span>
-                <h3>Benefits of Water Aerobics for Fitness</h3>
-                <p className="text-base text-body-color">
-                  Discover how water aerobics can enhance your fitness routine.
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-wrap">
+          {blogData.map((blog, index) => (
+            <BlogCard blog={blog} key={index} />
+          ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

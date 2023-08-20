@@ -1,6 +1,9 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
-
+import { useInView } from "react-intersection-observer";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
 interface links {
   link: string;
 }
@@ -42,8 +45,28 @@ const links: links[] = [
 ];
 
 const footer = () => {
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true, // Only trigger the animation once
+    threshold: 0.2, // Percentage of the element in view
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
   return (
-    <div className=" bg-midnightblue">
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: 50 },
+      }}
+      transition={{ duration: 0.5 }}
+      className=" bg-midnightblue">
       <div className="mx-auto max-w-2xl pt-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="flex gap-4 justify-center my-5">
           {socialLinks.map((items, i) => (
@@ -69,7 +92,7 @@ const footer = () => {
           </h4>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
