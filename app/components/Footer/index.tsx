@@ -44,7 +44,7 @@ const links: links[] = [
   },
 ];
 
-const footer = () => {
+const Footer = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({
     triggerOnce: true, // Only trigger the animation once
@@ -96,4 +96,4 @@ const footer = () => {
   );
 };
 
-export default footer;
+export default Footer;
